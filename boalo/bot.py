@@ -53,7 +53,8 @@ def check_user(chat):
     if user and user.activated and not user.banned:
         return True
     elif user is None:
-        add(sr(), models.User(id=chat.id, name=chat.name))
+        add(sr(), models.User(id=chat.id, name=chat.name,
+                              username=chat.username))
         chat.send((
             "Hi! Admin has been informed.\n"
             "They will contact you eventually."))
