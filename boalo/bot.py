@@ -150,12 +150,12 @@ def addinfo_command(chat, message):
     if not check_admin(chat):
         return
 
-    message = message.text.split()
-    if len(message) < 3:
+    split = message.text.split()
+    if len(split) < 3:
         chat.send("`addinfo TITLE TEXT'")
         return
-    title = message[1]
-    text = " ".join(message[2:])
+    title = split[1]
+    text = message[len('addinfo  ') + len(title):]
     add(sr(), models.Info(title=title, text=text))
     sr.remove()
 
