@@ -118,6 +118,19 @@ def menu(rows=None, user=None):
     return buttons
 
 
+@bot.command("start")
+def start_command(chat, message, args):
+    """
+    nothing special just the begining
+    """
+    chat.send("Hey hello")
+
+    if not check_user(chat):
+        return
+
+    sr.remove()
+
+
 @bot.command("info")
 def info_command(chat, message, args):
     """
