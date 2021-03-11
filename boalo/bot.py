@@ -356,3 +356,40 @@ def charge_command(chat, message):
     chat.send((f"Successfully created {fee} Tomans invoice"
                f" for {len(active_users)} users."))
     sr.remove()
+
+@bot.message_matches("list")
+def list_command(chat, message):
+    """
+    ADMINONLY list all users
+    """
+    if not check_admin(chat):
+        return
+
+    users = db_query(sr(), models.User,
+                     models.User.banned == False)
+    chat.send("\n".join([(f"{user.name}, {user.username}, {user.id}"
+     f"{user.activated}, {user.locked}, {user.credit}")
+     for user in users]))
+    sr.remove()
+
+@bot.message_matches("del \d+")
+def del_command(chat, message):
+    """
+    ADMINONLY del a user
+    """
+    if not check_admin(chat):
+        return
+
+    uid = message.split()[1]
+    user = db_query(sr(), models.User,
+                    models.User.id == uid,
+                    one=True)
+    if user is None:
+        chat.send("User not exists.")
+        return
+
+    user.lock_vpn()
+    user.activated = False
+    sr().commit()
+    chat.send(f'User {user.name}, {user.username} deactivated and locked')
+    sr.remove()
