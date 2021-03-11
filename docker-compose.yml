@@ -10,6 +10,8 @@ services:
       - ENGINE_URI=
         #postgresql://wowuser:wowpass@localhost:5010/wowdb
       - TELEGRAM_ADMIN_ID=
+    volumes:
+      - /etc/ocserv:/etc/ocserv
     depends_on:
       - db
   db:
