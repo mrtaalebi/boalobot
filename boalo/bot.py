@@ -233,7 +233,7 @@ def pay_command(chat, message, args):
         chat.send((
             f"Please transfer {total - user.credit:.2f} Tomans"
             " to the following card, And then send a photo of recepit here.\n"
-            f"\n{card}"))
+            f"\n{card.text}"))
     else:
         chat.send(f"You may pay {total - user.credit:.2f} Tomans.\n"
                   "But it's not nesseccary as it's under 5 Tomans")
@@ -297,20 +297,27 @@ def payfor_command(chat, message):
     except:
         chat.send("Amount must be a positive number.")
         return
-    user.credit += amonut
+    user.credit += amount
     invoices = db_query(sr(), models.Invoice,
                      models.Invoice.paid == False,
-                     models.Invoice.user.id == user.id)
+                     models.Invoice.user_id == user.id)
+    paid_invoices, paid, total = [], 0, 0
     for invoice in invoices:
         if invoice.fee <= user.credit:
             invoice.paid = True
             user.credit -= invoice.fee
+            paid_invoices.append(invoice)
+            paid += invoice.fee
+        total += invoice.fee
+
     sr().commit()
     chat.send(
         f"Successfully paid for user {user.name}, {user.username}\n",
         attach=menu(user=user))
-    bot.chat(user.id).send(("You have paid zero or more invoices "
-                            f"and have {user.credit} Tomans in your account."))
+    bot.chat(user.id).send((f"You have paid for {len(paid_invoices)} invoices "
+                            f"for a total of {paid} Tomans "
+                            f"and owe {total - paid} Tomans.\n"
+                            f"You have {user.credit} Tomans in your account."))
     sr.remove()
 
 @bot.message_matches("charge (\d+)")
