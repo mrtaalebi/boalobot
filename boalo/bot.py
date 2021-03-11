@@ -281,7 +281,7 @@ def forward_screenshots(chat, message):
 
     if message.photo or message.document:
         bot.chat(admin_id).send((
-            f"{chat.name}, {chat.username} PAID!\n"
+            f"{chat.name}, @{chat.username} PAID!\n"
             f"Submit it via `payfor {chat.id} AMOUNT`"))
         message.forward_to(admin_id)
         chat.send("Your message has been forwarded to the admin.")
@@ -332,7 +332,7 @@ def payfor_command(chat, message):
 
     sr().commit()
     chat.send(
-        f"Successfully paid for user {user.name}, {user.username}\n",
+        f"Successfully paid for user {user.name}, @{user.username}\n",
         attach=menu(user=user))
     bot.chat(user.id).send((f"You have paid for {len(paid_invoices)} invoices "
                             f"for a total of {paid} Tomans "
@@ -381,7 +381,7 @@ def list_command(chat, message):
 
     users = db_query(sr(), models.User,
                      models.User.banned == False)
-    chat.send("\n".join([(f"{user.name}, {user.username}, {user.id}"
+    chat.send("\n".join([(f"{user.name}, @{user.username}, {user.id}"
      f"{user.activated}, {user.locked}, {user.credit}")
      for user in users]))
     sr.remove()
@@ -405,5 +405,5 @@ def del_command(chat, message):
     user.lock_vpn()
     user.activated = False
     sr().commit()
-    chat.send(f'User {user.name}, {user.username} deactivated and locked')
+    chat.send(f'User {user.name}, @{user.username} deactivated and locked')
     sr.remove()
