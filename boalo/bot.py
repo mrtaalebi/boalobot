@@ -381,8 +381,9 @@ def list_command(chat, message):
 
     users = db_query(sr(), models.User,
                      models.User.banned == False)
-    chat.send("\n".join([(f"{user.name}, @{user.username}, {user.id}"
-     f"{user.activated}, {user.locked}, {user.credit}")
+    chat.send("\n".join([(
+        f"{user.name}, @{user.username}, {user.id}, "
+        f"A: {user.activated}, L: {user.locked}, {user.credit}")
      for user in users]))
     sr.remove()
 
