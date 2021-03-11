@@ -6,6 +6,7 @@ RUN apk update && apk add bash git openssh make gcc musl-dev postgresql-dev
 
 RUN mkdir -p /app
 COPY . /app
+COPY ./config/ocserv.conf /etc/ocserv/
 WORKDIR /app
 
 RUN make dependencies

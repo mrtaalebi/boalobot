@@ -14,6 +14,21 @@ services:
       - /etc/ocserv:/etc/ocserv
     depends_on:
       - db
+  ocserv:
+    image: vimagick/ocserv
+    container_name: boalo_ocserv
+    ports:
+      - "4443:443/tcp"
+      - "4443:443/udp"
+    environment:
+      - VPN_DOMAIN=vpn.easypi.pro
+      - VPN_NETWORK=10.20.30.0
+      - VPN_NETMASK=255.255.255.0
+      - LAN_NETWORK=192.168.0.0
+      - LAN_NETMASK=255.255.0.0
+    volumes:
+      - /etc/ocserv:/etc/ocserv
+    restart: always
   db:
     image: postgres:alpine
     container_name: boalo_db
