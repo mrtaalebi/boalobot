@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  boalo:
+    image: python:alpine
+    build: .
+    ports:
+      - 5080:80
+      - 5443:443
+    environment:
+      - BOT_API_KEY=
+      - ENGINE_URI=
+        #postgresql://wowuser:wowpass@localhost:5010
+      - TELEGRAM_ADMIN_ID=
+    depends_on:
+      - db
+  db:
+    image: postgres:alpine
+    ports:
+      - 5010:5432
+    restart: always
+    environment:
+      - POSTGRES_USER=wowuser
+      - POSTGRES_PASSWORD=wowpass

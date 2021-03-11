@@ -1,0 +1,61 @@
+import os
+
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, Float
+from sqlalchemy.ext.declarative import declarative_base
+
+
+Base = declarative_base()
+
+
+class User(Base):
+
+    __tablename__ = "user"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(512))
+    username = Column(String(128))
+    vpn_username = Column(String(16), nullable=True)
+    vpn_password = Column(String(128), nullable=True)
+    credit = Column(Float, default=0)
+    activated = Column(Boolean, default=False)
+    banned = Column(Boolean, default=False)
+    locked = Column(Boolean, default=False)
+
+    @property
+    def vpn_info(self):
+        return (f'username: {self.vpn_username}\n'
+                f'password: {self.vpn_password}\n')
+
+    def add_vpn(self):
+        os.system(f'echo {self.vpn_password} | ocpasswd {self.vpn_username}')
+
+    def lock_vpn(self):
+        if self.locked:
+            return
+        os.system(f'ocpasswd -l {self.vpn_username}')
+        self.locked = True
+
+    def unlock_vpn(self):
+        if not self.locked:
+            return
+        os.system(f'ocpasswd -u {self.vpn_username}')
+        self.locked = False
+
+
+class Info(Base):
+
+    __tablename__ = "info"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String(32))
+    text = Column(String(4096))
+
+
+class Invoice(Base):
+
+    __tablename__ = "invoice"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(ForeignKey("user.id"))
+    paid = Column(Boolean, default=False)
+    fee = Column(Float())
