@@ -155,7 +155,7 @@ def addinfo_command(chat, message):
         chat.send("`addinfo TITLE TEXT'")
         return
     title = split[1]
-    text = message[len('addinfo  ') + len(title):]
+    text = message.text[len('addinfo  ') + len(title):]
     add(sr(), models.Info(title=title, text=text))
     sr.remove()
 
