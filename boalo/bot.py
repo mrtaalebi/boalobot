@@ -139,7 +139,10 @@ def info_callback(query, data, chat, message):
 @bot.callback("vpn_info_callback")
 def vpn_info_callback(query, data, chat, message):
     user = get_user(chat)
-    chat.send(user.vpn_info)
+    host = db_query(sr(), models.Info,
+                    models.Info.title == "vpn_host",
+                    one=True)
+    chat.send(f"{host.text}\n{user.vpn_info}")
     sr.remove()
 
 @bot.message_matches("addinfo .+")
