@@ -59,3 +59,4 @@ class Invoice(Base):
     user_id = Column(ForeignKey("user.id"))
     paid = Column(Boolean, default=False)
     fee = Column(Float())
+    date = Column(DateTime)

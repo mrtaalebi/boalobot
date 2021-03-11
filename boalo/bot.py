@@ -214,7 +214,7 @@ def total_invoices(user):
     invoices = db_query(sr(), models.Invoice,
                      models.Invoice.paid == False,
                      models.Invoice.user_id == user.id)
-    return sum([i.fee for i in invoices])
+    return sum([i.fee for i in invoices]), invoices
 
 @bot.command("pay")
 def pay_command(chat, message, args):
@@ -225,7 +225,7 @@ def pay_command(chat, message, args):
         return
 
     user = get_user(chat)
-    total = total_invoices(user)
+    total, _ = total_invoices(user)
     card = db_query(sr(), models.Info,
                     models.Info.title == 'card'
                     , one=True)
@@ -245,9 +245,11 @@ def check_payments(bot):
         return
     users = db_query(sr(), models.User)
     for user in users:
-        debt = total_invoices(user)
+        debt, invoices = total_invoices(user)
         if debt >= 5:
-            user.lock_vpn()
+            for invoice in invoices:
+                if invoice.date + datetime.timedelta(days=3) < today:
+                    user.lock_vpn()
             sr().commit()
             bot.chat(user.id).send((
                 "Your vpn account has been locked.\n"
@@ -342,9 +344,11 @@ def charge_command(chat, message):
                          models.User.banned == False,
                          models.User.locked == False)
     fee = float(f'{server_fee / len(active_users):.2f}')
+    today = datetime.datetime.now(pytz.timezone('Asia/Tehran')).date()
     for user in active_users:
         add(sr(), models.Invoice(user_id=user.id,
-                                 fee=fee))
+                                 fee=fee,
+                                 date=today))
     chat.send((f"Successfully created {fee} Tomans invoice"
                f" for {len(active_users)} users."))
     sr.remove()
