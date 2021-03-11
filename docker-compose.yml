@@ -28,6 +28,7 @@ services:
       - LAN_NETMASK=255.255.0.0
     volumes:
       - /etc/ocserv:/etc/ocserv
+      - /etc/letsencrypt:/etc/letsencrypt
     restart: always
   db:
     image: postgres:alpine
