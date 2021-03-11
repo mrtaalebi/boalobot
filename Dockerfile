@@ -27,9 +27,6 @@ RUN buildDeps=" \
     && apk add --update --virtual .build-deps $buildDeps \
     && curl -SL $OCSERV_URL -o ocserv.tar.xz \
     && curl -SL $OCSERV_URL.sig -o ocserv.tar.xz.sig \
-    && gpg --keyserver pgp.mit.edu --recv-key 7F343FA7 \
-    && gpg --keyserver pgp.mit.edu --recv-key 96865171 \
-    && gpg --verify ocserv.tar.xz.sig \
     && mkdir -p /usr/src/ocserv \
     && tar -xf ocserv.tar.xz -C /usr/src/ocserv --strip-components=1 \
     && rm ocserv.tar.xz* \
@@ -53,7 +50,6 @@ RUN buildDeps=" \
 
 RUN mkdir -p /app
 COPY . /app
-COPY ./config/ocserv.conf /etc/ocserv/
 WORKDIR /app
 
 RUN make dependencies

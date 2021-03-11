@@ -11,7 +11,7 @@ services:
         #postgresql://wowuser:wowpass@localhost:5010/wowdb
       - TELEGRAM_ADMIN_ID=
     volumes:
-      - /etc/ocserv:/etc/ocserv
+      - ./config/ocserv:/etc/ocserv
     depends_on:
       - db
   ocserv:
@@ -21,7 +21,7 @@ services:
       - "4443:443/tcp"
       - "4443:443/udp"
     volumes:
-      - /etc/ocserv:/etc/ocserv
+      - ./config/ocserv:/etc/ocserv
       - /etc/letsencrypt:/etc/letsencrypt
     restart: always
   db:
