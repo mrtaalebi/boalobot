@@ -329,6 +329,8 @@ def payfor_command(chat, message):
             paid_invoices.append(invoice)
             paid += invoice.fee
         total += invoice.fee
+    if len(paid_invoices) == len(invoices):
+        user.unlock_vpn()
 
     sr().commit()
     chat.send(
