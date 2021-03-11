@@ -252,7 +252,7 @@ def check_payments(bot):
         debt, invoices = total_invoices(user)
         if debt >= 5:
             for invoice in invoices:
-                if invoice.date + datetime.timedelta(days=3) < today.date()
+                if invoice.date + datetime.timedelta(days=3) < today.date():
                     user.lock_vpn()
             sr().commit()
             bot.chat(user.id).send((
