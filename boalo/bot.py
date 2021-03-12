@@ -265,14 +265,15 @@ def pay_command(chat, message, args):
 @bot.timer(3600)
 def check_payments(bot):
     today = datetime.datetime.now(pytz.timezone('Asia/Tehran'))
-    if today.hour != 21:
+    if today.hour != 23:
         return
     users = db_query(sr(), models.User)
     for user in users:
         debt, invoices = total_invoices(user)
         if debt >= 5:
             for invoice in invoices:
-                if invoice.date + datetime.timedelta(days=3) < today.date():
+                if (invoice.date + datetime.timedelta(days=3)).date() \
+                        < today.date():
                     user.lock_vpn()
             sr().commit()
             bot.chat(user.id).send((
