@@ -419,3 +419,22 @@ def del_command(chat, message):
     sr().commit()
     chat.send(f'User {user.name}, @{user.username} deactivated and locked')
     sr.remove()
+
+@bot.message_matches("sendtoall .+")
+def sendtoall_command(chat, message):
+    """
+    ADMINONLY send message to all active users
+    """
+    if not check_admin(chat):
+        return
+
+    msg = message.text[len("sendtoall "):]
+    for user in db_query(sr(), models.User,
+                         models.User.activated == True):
+        try:
+            bot.chat(user.id).send(msg)
+        except Exception as e:
+            print(str(e))
+            exp.append(user)
+    chat.send(f"Sent message to all users. {exp} problems.")
+    sr.remove()
