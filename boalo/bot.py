@@ -391,10 +391,11 @@ def list_command(chat, message):
 
     users = db_query(sr(), models.User,
                      models.User.banned == False)
-    chat.send("\n".join([(
-        f"{user.name}, @{user.username}, {user.id}, "
-        f"A: {user.activated}, L: {user.locked}, {user.credit}")
-     for user in users]))
+    msg = "```" + \
+        "\n".join([(f"{user.name}, @{user.username}, {user.id}, {user.credit}, "
+        f"A:{int(user.activated)}, L:{int(user.locked)}") for user in users]) \
+        + "```"
+    chat.send(msg)
     sr.remove()
 
 @bot.message_matches("del \d+")
