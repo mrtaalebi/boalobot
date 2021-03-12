@@ -291,8 +291,8 @@ def forward_screenshots(chat, message):
 
     if message.photo or message.document:
         bot.chat(admin_id).send((
-            f"{chat.name}, @{chat.username} PAID!\n"
-            f"Submit it via `payfor {chat.id} AMOUNT`"))
+            f"```{chat.name}, @{chat.username} PAID!\n"
+            f"Submit it via payfor {chat.id} AMOUNT```"))
         message.forward_to(admin_id)
         chat.send("Your message has been forwarded to the admin.")
         return True
