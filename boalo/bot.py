@@ -262,10 +262,10 @@ def pay_command(chat, message, args):
                   "But it's not nesseccary as it's under 5 Tomans")
     sr.remove()
 
-@bot.timer(3600)
+@bot.timer(900)
 def check_payments(bot):
     today = datetime.datetime.now(pytz.timezone('Asia/Tehran'))
-    if today.hour != 23:
+    if today.hour != 23 and today.minute > 15:
         return
     users = db_query(sr(), models.User)
     for user in users:
