@@ -265,7 +265,7 @@ def pay_command(chat, message, args):
 @bot.timer(900)
 def check_payments(bot):
     today = datetime.datetime.now(pytz.timezone('Asia/Tehran'))
-    if today.hour != 23 and today.minute > 15:
+    if today.hour != 23 or today.minute > 15:
         return
     users = db_query(sr(), models.User)
     for user in users:
