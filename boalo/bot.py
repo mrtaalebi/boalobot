@@ -429,6 +429,7 @@ def sendtoall_command(chat, message):
         return
 
     msg = message.text[len("sendtoall "):]
+    exp = []
     for user in db_query(sr(), models.User,
                          models.User.activated == True):
         try:
