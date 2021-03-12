@@ -275,10 +275,13 @@ def check_payments(bot):
                 if (invoice.date + datetime.timedelta(days=3)).date() \
                         < today.date():
                     user.lock_vpn()
-            sr().commit()
+                bot.chat(user.id).send((
+                    "Your vpn account has been locked.\n"
+                    "Please pay to unlock."))
             bot.chat(user.id).send((
-                "Your vpn account has been locked.\n"
-                "Please pay to unlock."))
+                "Please Pay. your account will get locked in "
+                f"{3 - (today.date - invoice.date).days} days"))
+            sr().commit()
     sr.remove()
 
 @bot.process_message
