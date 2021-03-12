@@ -51,10 +51,12 @@ def get_user(chat):
 def check_user(chat):
     user = get_user(chat)
     if user and user.activated and not user.banned:
+        sr.remove()
         return True
     elif user is None:
         add(sr(), models.User(id=chat.id, name=chat.name,
                               username=chat.username))
+        sr.remove()
         chat.send((
             "Hi! Admin has been informed.\n"
             "They will contact you eventually."))
@@ -66,8 +68,10 @@ def check_user(chat):
             attach=buttons)
     elif user.banned:
         chat.send("You've been banned from this bot.")
+        sr.remove()
     else:
         chat.send("Please be patient!")
+        sr.remove()
     return False
 
 def check_admin(chat):
@@ -212,11 +216,13 @@ def add_vpn(chat, message, args):
             "A User with this username already exists.\n"
             "Choose another username\n"
             "`/vpn USERNAME PASSWORD`"))
+        sr.remove()
         return
     if len(password) < 8:
         chat.send((
             "Password is too short choose a longer one.\n"
             "`/vpn USERNAME PASSWORD`"))
+        sr.remove()
         return
     user.vpn_username = username
     user.vpn_password = password
@@ -309,6 +315,7 @@ def payfor_command(chat, message):
         chat.send((
             "Wrong UID...\n"
             "`payfor UID AMOUNT`"))
+        sr.remove()
         return
     try:
         amount = float(amount)
@@ -316,6 +323,7 @@ def payfor_command(chat, message):
             raise
     except:
         chat.send("Amount must be a positive number.")
+        sr.remove()
         return
     user.credit += amount
     invoices = db_query(sr(), models.Invoice,
