@@ -410,7 +410,7 @@ def del_command(chat, message):
     if not check_admin(chat):
         return
 
-    uid = message.split()[1]
+    uid = int(message.text.split()[1])
     user = db_query(sr(), models.User,
                     models.User.id == uid,
                     one=True)
