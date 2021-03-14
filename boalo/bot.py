@@ -395,14 +395,14 @@ def list_command(chat, message):
 
     users = db_query(sr(), models.User,
                      models.User.banned == False)
-    msg = "" + \
+    msg = "```" + \
         "\n\n".join(
             [(f"{user.name}"
               f"\n\t@{user.username}, {user.id}"
               f"\n\tC:{user.credit}, D:{total_invoices(user)[0]}"
               f"\n\tA:{int(user.activated)}, L:{int(user.locked)}")
              for user in users]) \
-        + ""
+        + "```"
     chat.send(msg.encode())
     sr.remove()
 
