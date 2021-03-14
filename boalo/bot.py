@@ -403,7 +403,7 @@ def list_command(chat, message):
               f"\n\tA:{int(user.activated)}, L:{int(user.locked)}")
              for user in users]) \
         + "```"
-    chat.send(msg.encode())
+    chat.send(msg)
     sr.remove()
 
 @bot.message_matches("del \d+")
