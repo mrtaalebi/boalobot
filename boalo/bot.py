@@ -267,7 +267,9 @@ def check_payments(bot):
     today = datetime.datetime.now(pytz.timezone('Asia/Tehran'))
     if today.hour != 23 or today.minute > 15:
         return
-    users = db_query(sr(), models.User)
+    users = db_query(sr(), models.User,
+                     models.User.activated == True,
+                     models.User.locked == False)
     for user in users:
         debt, invoices = total_invoices(user)
         if debt >= 5:
