@@ -397,13 +397,13 @@ def list_command(chat, message):
                      models.User.banned == False)
     msg = "" + \
         "\n\n".join(
-            [(f"'{user.name}'"
+            [(f"{user.name}"
               f"\n\t@{user.username}, {user.id}"
               f"\n\tC:{user.credit}, D:{total_invoices(user)[0]}"
               f"\n\tA:{int(user.activated)}, L:{int(user.locked)}")
              for user in users]) \
         + ""
-    chat.send(msg)
+    chat.send(msg.encode())
     sr.remove()
 
 @bot.message_matches("del \d+")
