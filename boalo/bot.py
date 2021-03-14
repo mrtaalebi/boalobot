@@ -395,11 +395,14 @@ def list_command(chat, message):
 
     users = db_query(sr(), models.User,
                      models.User.banned == False)
-    msg = "```" + \
-        "\n\n".join([(f"{user.name}, @{user.username}, {user.id}, "
-        f"C:{user.credit}, D:{total_invoices(user)[0]}, "
-        f"A:{int(user.activated)}, L:{int(user.locked)}") for user in users]) \
-        + "```"
+    msg = "" + \
+        "\n\n".join(
+            [(f"'{user.name}'"
+              f"\n\t@{user.username}, {user.id}"
+              f"\n\tC:{user.credit}, D:{total_invoices(user)[0]}"
+              f"\n\tA:{int(user.activated)}, L:{int(user.locked)}")
+             for user in users]) \
+        + ""
     chat.send(msg)
     sr.remove()
 
