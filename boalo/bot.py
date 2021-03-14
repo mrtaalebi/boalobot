@@ -396,7 +396,8 @@ def list_command(chat, message):
     users = db_query(sr(), models.User,
                      models.User.banned == False)
     msg = "```" + \
-        "\n".join([(f"{user.name}, @{user.username}, {user.id}, {user.credit}, "
+        "\n\n".join([(f"{user.name}, @{user.username}, {user.id}, "
+        f"C:{user.credit}, D:{total_invoices(user)[0]}, "
         f"A:{int(user.activated)}, L:{int(user.locked)}") for user in users]) \
         + "```"
     chat.send(msg)
