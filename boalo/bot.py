@@ -430,6 +430,32 @@ def del_command(chat, message):
     chat.send(f'User {user.name}, @{user.username} deactivated and locked')
     sr.remove()
 
+
+@bot.message_matches("mod (\d+) ([-+][AL])+")
+def modify_user(chat, message):
+    """
+    ADMINONLY change attrs for a user
+    """
+    if not check_admin(chat):
+        return
+
+    args = messages.split[1:]
+    uid = args[0]
+    user = db_query(sr(), models.User,
+                    models.User.id == uid,
+                    one=True)
+    if user is None:
+        chat.send("User not found.")
+        return
+
+    changes = [(m[0] == "+",
+                "activated" if m[1] == "A" else "locked")
+               for m in args[1:]]
+    for value, key in changes:
+        setattr(user, key, value)
+    sr().commit()
+    sr.remove()
+
 @bot.message_matches("sendtoall .+")
 def sendtoall_command(chat, message):
     """
