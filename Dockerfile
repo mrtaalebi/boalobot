@@ -54,4 +54,4 @@ WORKDIR /app
 
 RUN make dependencies
 
-ENTRYPOINT ["python", "-m boalo"]
+ENTRYPOINT ["sh", "-c", "python -m boalo"]
