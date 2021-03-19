@@ -43,6 +43,12 @@ class User(Base):
         self.add_vpn()
         self.locked = False
 
+    def change_vpn(self, lock):
+        if lock:
+            self.lock_vpn()
+        else:
+            self.unlock_vpn()
+
 
 class Info(Base):
 

@@ -448,11 +448,13 @@ def modify_user(chat, message):
         chat.send("User not found.")
         return
 
-    changes = [(m[0] == "+",
-                "activated" if m[1] == "A" else "locked")
+    changes = [("activated" if m[1] == "A" else "locked",
+                m[0] == "+")
                for m in args[1:]]
-    for value, key in changes:
+    for key, value in changes:
         setattr(user, key, value)
+        if key == 'locked':
+            user.change_vpn(lock=value)
     sr().commit()
     sr.remove()
 
