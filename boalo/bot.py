@@ -276,7 +276,7 @@ def check_payments(bot):
             for invoice in invoices:
                 if (invoice.date + datetime.timedelta(days=3)).date() \
                         < today.date():
-                    user.lock_vpn()
+                    user.change_vpn(lock=True)
                 bot.chat(user.id).send((
                     "Your vpn account has been locked.\n"
                     "Please pay to unlock."))
@@ -344,7 +344,7 @@ def payfor_command(chat, message):
             paid += invoice.fee
         total += invoice.fee
     if len(paid_invoices) == len(invoices):
-        user.unlock_vpn()
+        user.change_vpn(lock=False)
 
     sr().commit()
     chat.send(
@@ -424,7 +424,7 @@ def del_command(chat, message):
         chat.send("User not exists.")
         return
 
-    user.lock_vpn()
+    user.change_vpn(lock=True)
     user.activated = False
     sr().commit()
     chat.send(f'User {user.name}, @{user.username} deactivated and locked')

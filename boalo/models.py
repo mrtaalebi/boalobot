@@ -30,24 +30,12 @@ class User(Base):
         os.system((f'echo {self.vpn_password} | '
                    f'ocpasswd {self.vpn_username} -c /etc/ocserv/pass.wd'))
 
-    def lock_vpn(self):
-        # 'ocpasswd -l' (locking user) not working or doing something useless
-        if self.locked:
-            return
-        os.system(f'ocpasswd -d {self.vpn_username} -c /etc/ocserv/pass.wd')
-        self.locked = True
-
-    def unlock_vpn(self):
-        if not self.locked:
-            return
-        self.add_vpn()
-        self.locked = False
-
     def change_vpn(self, lock):
         if lock:
-            self.lock_vpn()
+            os.system((f'ocpasswd -d {self.vpn_username} -c /etc/ocserv/pass.wd'))
         else:
-            self.unlock_vpn()
+            self.add_vpn()
+        self.locked = lock
 
 
 class Info(Base):
