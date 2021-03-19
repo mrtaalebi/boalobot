@@ -439,7 +439,7 @@ def modify_user(chat, message):
     if not check_admin(chat):
         return
 
-    args = message.split[1:]
+    args = message.text.split[1:]
     uid = args[0]
     user = db_query(sr(), models.User,
                     models.User.id == uid,
