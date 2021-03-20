@@ -387,6 +387,40 @@ def charge_command(chat, message):
                f" for {len(active_users)} users."))
     sr.remove()
 
+
+@bot.message_matches("chargeone (\d+)([.]\d+)? (\d+)")
+def charge_command(chat, message):
+    """
+    ADMINONLY charge people and get rich
+    """
+    if not check_admin(chat):
+        return
+
+    args = message.text.split()[1:]
+    if len(args) != 2:
+        chat.send("Use like `chargeone UID AMOUNT`")
+        return
+    try:
+        uid = int(args[0])
+        fee = float(args[1])
+    except:
+        chat.send("UID must be an int and Amount must be a float.")
+        return
+    user = db_query(sr(), models.User,
+                    models.User.id == uid,
+                    one=True)
+    if user is None:
+        chat.send("User with uid not fonud.")
+        return
+    today = datetime.datetime.now(pytz.timezone('Asia/Tehran')).date()
+    add(sr(), models.Invoice(user_id=user.id,
+                             fee=fee,
+                             date=today))
+    chat.send((f"Successfully created a {fee} Tomans invoice"
+               f" for {user.name}."))
+    sr.remove()
+
+
 @bot.message_matches("list")
 def list_command(chat, message):
     """
