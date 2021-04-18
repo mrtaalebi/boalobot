@@ -83,6 +83,8 @@ def user_add_callback(query, data, chat, message):
     if not check_admin(chat):
         return
 
+    print(message)
+    return
     user = db_query(sr(), models.User,
                  models.User.id == data,
                  one=True)
