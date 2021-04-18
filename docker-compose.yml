@@ -32,4 +32,5 @@ services:
       - POSTGRES_DB=wowdb
       - POSTGRES_USER=wowuser
       - POSTGRES_PASSWORD=wowpass
-      - PG_DATA=/var/lib/postgresql/data/pgdata
+    voluems:
+      - ./pgdata/:/var/lib/postgresql/data/
