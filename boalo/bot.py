@@ -83,20 +83,16 @@ def user_add_callback(query, data, chat, message):
     if not check_admin(chat):
         return
 
-    print(message)
-    return
     user = db_query(sr(), models.User,
                  models.User.id == data,
                  one=True)
     if user is not None:
         bot.chat(admin_id).send('User already exists.')
         return
-    add(sr(), models.User(id=chat.id, name=chat.name,
-                          username=chat.username, activated=True))
+    user = bot.chat(data)
+    add(sr(), models.User(id=user.id, name=user.name,
+                          username=user.username, activated=True))
     sr().commit()
-    user = db_query(sr(), models.User,
-                 models.User.id == data,
-                 one=True)
     bot.chat(user.id).send("Now we're talking!", attach=menu())
     sr.remove()
 
