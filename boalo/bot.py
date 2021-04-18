@@ -37,6 +37,7 @@ def db_query(session, model, *filters, one=False):
     else:
         return list(q)
 
+
 def add(session, obj):
     session.add(obj)
     session.commit()
@@ -85,8 +86,15 @@ def user_add_callback(query, data, chat, message):
     user = db_query(sr(), models.User,
                  models.User.id == data,
                  one=True)
-    user.activated = True
+    if user is not None:
+        bot.chat(admin_id).send('User already exists.')
+        return
+    add(sr(), models.User(id=chat.id, name=chat.name,
+                          username=chat.username, activated=True))
     sr().commit()
+    user = db_query(sr(), models.User,
+                 models.User.id == data,
+                 one=True)
     bot.chat(user.id).send("Now we're talking!", attach=menu())
     sr.remove()
 
