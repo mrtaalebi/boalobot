@@ -280,15 +280,15 @@ def check_payments(bot):
         debt, invoices = total_invoices(user)
         if debt >= 5:
             for invoice in invoices:
-                if (invoice.date + datetime.timedelta(days=3)).date() \
+                if (invoice.date + datetime.timedelta(days=5)).date() \
                         < today.date():
                     user.change_vpn(lock=True)
-                bot.chat(user.id).send((
-                    "Your vpn account has been locked.\n"
-                    "Please pay to unlock."))
+                    bot.chat(user.id).send((
+                        "Your vpn account has been locked.\n"
+                        "Please pay to unlock."))
             bot.chat(user.id).send((
                 "Please Pay. your account will get locked in "
-                f"{3 - (today.date - invoice.date).days} days"))
+                f"{5 - (today.date - invoice.date).days} days"))
             sr().commit()
     sr.remove()
 
