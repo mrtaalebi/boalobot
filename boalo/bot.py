@@ -395,7 +395,7 @@ def charge_command(chat, message):
 
 
 @bot.message_matches("chargeone (\d+)([.]\d+)? (\d+)")
-def charge_command(chat, message):
+def charge_one_command(chat, message):
     """
     ADMINONLY charge people and get rich
     """
