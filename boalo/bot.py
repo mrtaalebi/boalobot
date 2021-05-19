@@ -288,7 +288,7 @@ def check_payments(bot):
                         "Please pay to unlock."))
             bot.chat(user.id).send((
                 "Please Pay. your account will get locked in "
-                f"{5 - (today.date() - invoice.date).days} days"))
+                f"{5 - (today.replace(hour=0, minute=0, second=0, microsecond=0) - invoice.date).days} days"))
             sr().commit()
     sr.remove()
 
@@ -384,7 +384,9 @@ def charge_command(chat, message):
                          models.User.banned == False,
                          models.User.locked == False)
     fee = float(f'{server_fee / len(active_users):.2f}')
-    today = datetime.datetime.now(pytz.timezone('Asia/Tehran')).date()
+    today = datetime.datetime.now(pytz.timezone('Asia/Tehran')).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
     for user in active_users:
         add(sr(), models.Invoice(user_id=user.id,
                                  fee=fee,
