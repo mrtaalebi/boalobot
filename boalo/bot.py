@@ -288,7 +288,7 @@ def check_payments(bot):
                         "Please pay to unlock."))
             bot.chat(user.id).send((
                 "Please Pay. your account will get locked in "
-                f"{5 - (today.date - invoice.date).days} days"))
+                f"{5 - (today.date() - invoice.date).days} days"))
             sr().commit()
     sr.remove()
 
