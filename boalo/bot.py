@@ -518,6 +518,6 @@ def sendtoall_command(chat, message):
             bot.chat(user.id).send(msg)
         except Exception as e:
             print(str(e))
-            exp.append(user)
+            exp.append(user.name)
     chat.send(f"Sent message to all users. {exp} problems.")
     sr.remove()
