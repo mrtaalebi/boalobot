@@ -87,7 +87,9 @@ def user_add_callback(query, data, chat, message):
                  models.User.id == data,
                  one=True)
     if user is not None:
-        bot.chat(admin_id).send('User already exists.')
+        bot.chat(admin_id).send('User has been activated.')
+        user.activated = True
+        sr.commit()
         return
     user = bot.chat(data)
     add(sr(), models.User(id=user.id, name=user.name,
@@ -268,7 +270,7 @@ def pay_command(chat, message, args):
                   "But it's not nesseccary as it's under 5 Tomans")
     sr.remove()
 
-@bot.timer(60)
+@bot.timer(3600)
 def check_payments(bot):
     today = datetime.datetime.now(pytz.timezone('Asia/Tehran'))
     if today.hour != 23:
