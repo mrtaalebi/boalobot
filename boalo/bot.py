@@ -15,6 +15,8 @@ try:
     api_key = env["BOT_API_KEY"]
     engine_uri = env["ENGINE_URI"]
     admin_id = int(env["TELEGRAM_ADMIN_ID"])
+    min_debt = int(env["MIN_DEBT"])
+    days_to_pay = int(env["DAYS_TO_PAY"])
 except:
     print('REQUIRED ENV VARS NOT PRESENT')
     exit(1)
@@ -280,17 +282,27 @@ def check_payments(bot):
                      models.User.locked == False)
     for user in users:
         debt, invoices = total_invoices(user)
-        if debt >= 5:
+        if debt >= min_debt:
             for invoice in invoices:
-                if (invoice.date + datetime.timedelta(days=5)).date() \
-                        < today.date():
+                days_before_lock = (
+                    days_to_pay
+                    - (
+                        today.replace(tzinfo=None)
+                        - invoice.date.replace(tzinfo=None)
+                    ).days
+                )
+                if days_before_lock >= 0:
+                    bot.chat(user.id).send((
+                        "Please pay, your account will get locked in "
+                        f"{days_beore_lock} days\n\n"
+                        "Use /pay command for details."
+                    ))
+                else:
                     user.change_vpn(lock=True)
                     bot.chat(user.id).send((
                         "Your vpn account has been locked.\n"
-                        "Please pay to unlock."))
-            bot.chat(user.id).send((
-                "Please Pay. your account will get locked in "
-                f"{5 - (today.replace(tzinfo=None) - invoice.date.replace(tzinfo=None)).days} days"))
+                        "Please pay to unlock."
+                    ))
             sr().commit()
     sr.remove()
 

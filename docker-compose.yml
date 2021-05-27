@@ -10,6 +10,8 @@ services:
       - ENGINE_URI=
         #postgresql://wowuser:wowpass@localhost:5010/wowdb
       - TELEGRAM_ADMIN_ID=
+      - MIN_DEBT=5
+      - DAYS_TO_PAY=7
     volumes:
       - ./config/ocserv:/etc/ocserv
     depends_on:
