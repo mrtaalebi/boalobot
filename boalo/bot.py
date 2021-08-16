@@ -294,7 +294,7 @@ def check_payments(bot):
                 if days_before_lock >= 0:
                     bot.chat(user.id).send((
                         "Please pay, your account will get locked in "
-                        f"{days_beore_lock} days\n\n"
+                        f"{days_before_lock} days\n\n"
                         "Use /pay command for details."
                     ))
                 else:
